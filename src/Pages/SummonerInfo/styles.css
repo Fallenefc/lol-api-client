@@ -1,7 +1,11 @@
 .ranked-container {
   border: 2px solid red;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  height: 200px;
+  width: 500px;
 }
 
 /* .summoner-info {

@@ -65,7 +65,7 @@ export default function SummonerInfo({}: Props): ReactElement {
             <div key={index} className="ranked-queue">
               <div className='ranked-container'>
                 <div className='ranked-image'>
-                  <img src='https://img.rankedboost.com/wp-content/uploads/2014/09/Season_2019_-_Gold_1.png'></img>
+                  <img src='https://img.rankedboost.com/wp-content/uploads/2014/09/Season_2019_-_Gold_1.png' width='150px' height='160px'></img>
                 </div>
                 <div className="ranked-info">
                   <div>
@@ -78,10 +78,11 @@ export default function SummonerInfo({}: Props): ReactElement {
                   </div>
                   <div>Wins: {info.wins}</div>
                   <div>Losses: {info.losses}</div>
-                      Win%:{" "}
+                      Win Rate:{" "}
                       {Math.round((info.wins / (info.losses + info.wins)) * 100)}%
                 </div>
-
+              </div>
+              <div>
               </div>
               <br></br>
             </div>
