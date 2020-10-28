@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import "./styles.css";
 import { API_KEY } from "../../Environment";
 import Info from "../../Components/Info/Info";
+import Matches from "../../Components/Matches/Matches";
 
 interface Props {}
 
@@ -20,7 +21,7 @@ interface InfoInterface {
   queueType: string;
 }
 
-interface Match {
+interface MatchInterface {
   platformId: string,
   gameId: number,
   champion: number,
@@ -35,12 +36,13 @@ export default function SummonerInfo({}: Props): ReactElement {
   let params: Params = useParams();
   const [summonerInfo, setSummonerInfo] = useState<InfoInterface[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [matchList, setMatchList] = useState<Match[] | null>(null);
+  const [matchList, setMatchList] = useState<MatchInterface[] | null>(null);
 
   useEffect(() => {
     // Setting the CORS variable
     const cors = "https://cors-anywhere.herokuapp.com/";
     let sumId = "";
+    let accId = '';
 
     // First API call, to fetch the unique ID
     axios
@@ -49,6 +51,7 @@ export default function SummonerInfo({}: Props): ReactElement {
       )
       .then((res) => {
         sumId = res.data.id;
+        accId = res.data.accountId;
       })
       .catch((err) => {
         console.error(err);
@@ -66,6 +69,17 @@ export default function SummonerInfo({}: Props): ReactElement {
             setSummonerInfo(data);
           })
           .catch((err) => console.error(err));
+
+        axios
+          .get(
+            `${cors}https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/${accId}?api_key=${API_KEY}`
+          )
+          .then((res) => {
+            const data: [] = res.data.matches.slice(0,5);
+            console.log(data);
+            setMatchList(data);
+          })
+          .catch((err) => console.error(err));
       });
   }, []);
 
@@ -79,6 +93,14 @@ export default function SummonerInfo({}: Props): ReactElement {
       :
       <div>Loading</div>
       }
+      <div className='match-list'>
+        {matchList ?
+          matchList.map((match, index) => {
+            return <Matches {...match} key={index}/>
+          })
+          : <div>Loading Matches</div>
+        }
+      </div>
     </div>
   );
 }
