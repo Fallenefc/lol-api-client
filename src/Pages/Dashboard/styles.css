@@ -1,0 +1,15 @@
+.dashboard-container {
+  background-image: url('https://wallpapercave.com/wp/5BKO7u2.jpg');
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.content-container {
+  background-color: rgba(221, 116, 30, 0.863);
+  height: 100%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
