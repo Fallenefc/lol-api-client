@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import "./styles.css";
 import { API_KEY } from "../../Environment";
+import Info from "../../Components/Info/Info";
 
 interface Props {}
 
@@ -10,7 +11,7 @@ interface Params {
   sumName: string;
 }
 
-interface Info {
+interface InfoInterface {
   tier: string;
   losses: number;
   wins: number;
@@ -19,10 +20,22 @@ interface Info {
   queueType: string;
 }
 
+interface Match {
+  platformId: string,
+  gameId: number,
+  champion: number,
+  queue: number,
+  season: number,
+  timestamp: number,
+  role: string,
+  lane: string
+}
+
 export default function SummonerInfo({}: Props): ReactElement {
   let params: Params = useParams();
-  const [summonerInfo, setSummonerInfo] = useState<Info[] | null>([]);
+  const [summonerInfo, setSummonerInfo] = useState<InfoInterface[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [matchList, setMatchList] = useState<Match[] | null>(null);
 
   useEffect(() => {
     // Setting the CORS variable
@@ -57,40 +70,15 @@ export default function SummonerInfo({}: Props): ReactElement {
   }, []);
 
   return (
-    <div className="summoner-info">
-      {summonerInfo ? (
-        summonerInfo.map((info, index) => {
-          console.log(info);
-          return (
-            <div key={index} className="ranked-queue">
-              <div className='ranked-container'>
-                <div className='ranked-image'>
-                  <img src='https://img.rankedboost.com/wp-content/uploads/2014/09/Season_2019_-_Gold_1.png' width='150px' height='160px'></img>
-                </div>
-                <div className="ranked-info">
-                  <div>
-                    {info.queueType === "RANKED_FLEX_SR"
-                      ? "Ranked Flex"
-                      : "Ranked Solo"}
-                  </div>
-                  <div>
-                    {info.tier} {info.rank}
-                  </div>
-                  <div>Wins: {info.wins}</div>
-                  <div>Losses: {info.losses}</div>
-                      Win Rate:{" "}
-                      {Math.round((info.wins / (info.losses + info.wins)) * 100)}%
-                </div>
-              </div>
-              <div>
-              </div>
-              <br></br>
-            </div>
-          );
-        })
-      ) : (
-        <div>No such summoner!</div>
-      )}
+    <div>
+      {summonerInfo ? summonerInfo[0].summonerName : <div></div>}
+      {summonerInfo ?
+      summonerInfo.map((value, index) => {
+        return <Info {...value} key={index}/>
+      })
+      :
+      <div>Loading</div>
+      }
     </div>
   );
 }
