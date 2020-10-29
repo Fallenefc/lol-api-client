@@ -1,12 +1,14 @@
 import React, { ReactElement, useState } from 'react'
+import { useHistory } from "react-router-dom";
 
 export default function SearchBarInput(): ReactElement {
 
   const [input, setInput] = useState('')
+  const history = useHistory();
 
   const handleClick = (e: any):void => {
     e.preventDefault();
-    console.log(input);
+    history.push(`/${input}`)
   }
 
   const handleChange = (e: any):void => {
@@ -22,3 +24,4 @@ export default function SearchBarInput(): ReactElement {
     </div>
   )
 }
+

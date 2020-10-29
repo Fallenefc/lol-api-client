@@ -5,6 +5,7 @@ import "./styles.css";
 import { API_KEY } from "../../Environment";
 import Info from "../../Components/Info/Info";
 import Matches from "../../Components/Matches/Matches";
+import { API_URLS } from '../../Utils/URLs'
 
 interface Props {}
 
@@ -47,7 +48,7 @@ export default function SummonerInfo({}: Props): ReactElement {
     // First API call, to fetch the unique ID
     axios
       .get(
-        `${cors}https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${params.sumName}?api_key=${API_KEY}`
+        `${cors}${API_URLS.GET_NAME}${params.sumName}?api_key=${API_KEY}`
       )
       .then((res) => {
         sumId = res.data.id;
@@ -61,18 +62,16 @@ export default function SummonerInfo({}: Props): ReactElement {
       .then(() => {
         axios
           .get(
-            `${cors}https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${sumId}?api_key=${API_KEY}`
+            `${cors}${API_URLS.SUMMONER_INFO}${sumId}?api_key=${API_KEY}`
           )
           .then((res) => {
-            const data: [] = res.data;
-            console.log(data);
-            setSummonerInfo(data);
+            setSummonerInfo(res.data);
           })
           .catch((err) => console.error(err));
 
         axios
           .get(
-            `${cors}https://br1.api.riotgames.com/lol/match/v4/matchlists/by-account/${accId}?api_key=${API_KEY}`
+            `${cors}${API_URLS.MATCH_LIST}${accId}?api_key=${API_KEY}`
           )
           .then((res) => {
             const data: [] = res.data.matches.slice(0,5);
@@ -91,7 +90,7 @@ export default function SummonerInfo({}: Props): ReactElement {
         return <Info {...value} key={index}/>
       })
       :
-      <div>Loading</div>
+      <div>Loading Ranked Info</div>
       }
       <div className='match-list'>
         {matchList ?
